@@ -1,0 +1,30 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches:
+      - section05 # Запуск для ветки section04
+  pull_request:
+    branches:
+      - section05
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Шаг 1: Клонирование кода репозитория
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    # Шаг 2: Логин в Docker Hub с использованием секретов
+    - name: Log in to Docker Hub
+      run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+    # Шаг 3: Сборка Docker-образа
+    - name: Build Docker image
+      run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/prime_numbers:latest .
+
+    # Шаг 4: Публикация Docker-образа в Docker Hub
+    - name: Push Docker image to Docker Hub
+      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/prime_numbers:latest
