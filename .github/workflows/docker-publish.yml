@@ -3,9 +3,6 @@ name: Build and Push Docker Image
 on:
   push:
     branches:
-      - section05 
-  pull_request:
-    branches:
       - section05
 
 jobs:
@@ -17,12 +14,12 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    # Шаг 2: Логин в Docker Hub с использованием секретов
+    # Шаг 2: Логин в Docker Hub через Docker login action
     - name: Log in to Docker Hub
       uses: docker/login-action@v3
       with:
-        username: ${{ secrets.DOCKERHUB_USERNAME}}
-        password: ${{ secrets.DOCKERHUB_TOKEN}}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
 
     # Шаг 3: Сборка Docker-образа
     - name: Build Docker image
@@ -31,5 +28,3 @@ jobs:
     # Шаг 4: Публикация Docker-образа в Docker Hub
     - name: Push Docker image to Docker Hub
       run: docker push kozhmad/prime_numbers:latest
-
-
